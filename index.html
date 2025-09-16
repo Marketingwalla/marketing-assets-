@@ -1,9 +1,13 @@
+<!-- Chosen Palette: Brilliant Blues -->
+<!-- Application Structure Plan: The application is designed as a top-to-bottom narrative scroll, guiding the user from high-level insights to specific details and actionable advice. This thematic structure was chosen over a dashboard to tell a compelling story about the market shifts, making the complex information more digestible for the target audience (candidates, recruiters). The flow is: 1) Attention-grabbing KPIs. 2) Interactive Sector Comparison. 3) Compensation Breakdown. 4) In-demand Skills Analysis. 5) Global Market View. 6) Actionable Playbook. This logical progression from 'what' to 'why' and 'what to do' enhances user understanding and engagement. -->
+<!-- Visualization & Content Choices: 1. Hiring Sentiment by Sector -> Goal: Compare -> Viz: Bar Chart -> Interaction: Hover tooltips -> Justification: Directly compares performance of distinct sectors, clearly showing consulting's decline vs. others. (Chart.js/Canvas). 2. Compensation Changes -> Goal: Compare & show composition -> Viz: Stacked Bar Chart -> Interaction: Hover tooltips -> Justification: Visualizes the shift in total compensation structure, emphasizing the reduction in variable pay. (Chart.js/Canvas). 3. Skills Shift -> Goal: Organize & Compare -> Viz: Two-column HTML list with Unicode icons -> Interaction: None -> Justification: Qualitative data is best presented in a scannable, visually distinct format; icons improve readability. (HTML/Tailwind). 4. Global Trends -> Goal: Organize & Compare -> Viz: HTML cards in a grid -> Interaction: None -> Justification: Cards allow for concise regional summaries that are easy to scan and compare. (HTML/Tailwind). 5. Actionable Advice -> Goal: Organize -> Viz: Two-column HTML process flow -> Interaction: None -> Justification: A step-by-step visual structure makes the advice feel like a clear, actionable plan. (HTML/Tailwind). -->
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MBA & Analyst Hiring Trends 2025</title>
+    <title>MBA & Analyst Hiring Interactive Report 2025</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,325 +17,352 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #F0F4F8;
+            color: #003B55;
         }
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 600px;
+            max-width: 700px;
             margin-left: auto;
             margin-right: auto;
-            height: 300px;
-            max-height: 400px;
+            height: 350px;
+            max-height: 450px;
         }
         @media (min-width: 768px) {
             .chart-container {
-                height: 350px;
+                height: 400px;
             }
+        }
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #00A6ED;
+            transform: translateY(-2px);
         }
     </style>
 </head>
-<body class="text-[#003B55]">
+<body class="antialiased">
 
-    <div class="container mx-auto p-4 md:p-8">
-        
-        <header class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-[#003B55] mb-2">The New Playbook</h1>
-            <p class="text-lg md:text-xl text-[#00628E]">Navigating the 2025 MBA & Analyst Hiring Landscape</p>
-        </header>
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <nav class="w-full md:w-64 bg-white p-4 md:p-6 shadow-lg sticky top-0 md:h-screen z-10">
+            <h2 class="text-2xl font-bold text-[#003B55] mb-8">Hiring Report</h2>
+            <ul class="space-y-4">
+                <li><a href="#overview" class="nav-link font-semibold active">Overview</a></li>
+                <li><a href="#sectors" class="nav-link font-semibold">Sector Analysis</a></li>
+                <li><a href="#compensation" class="nav-link font-semibold">Compensation</a></li>
+                <li><a href="#skills" class="nav-link font-semibold">Skills in Demand</a></li>
+                <li><a href="#geography" class="nav-link font-semibold">Global View</a></li>
+                <li><a href="#playbook" class="nav-link font-semibold">Actionable Playbook</a></li>
+            </ul>
+        </nav>
 
-        <section class="mb-16">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col justify-center items-center">
-                    <p class="text-6xl font-extrabold text-[#00A6ED]">-35%</p>
-                    <h3 class="text-lg font-bold mt-2">Consulting Hiring</h3>
-                    <p class="text-sm text-[#00628E]">Estimated decline in new MBA and analyst roles at top-tier firms since last year.</p>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col justify-center items-center">
-                    <p class="text-6xl font-extrabold text-[#00A6ED]">+15%</p>
-                    <h3 class="text-lg font-bold mt-2">Demand for AI/ML Skills</h3>
-                    <p class="text-sm text-[#00628E]">Increase in job postings explicitly requiring data science and AI expertise across all sectors.</p>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg p-6 flex flex-col justify-center items-center">
-                    <p class="text-6xl font-extrabold text-[#00A6ED]">-20%</p>
-                    <h3 class="text-lg font-bold mt-2">Average Bonus Payouts</h3>
-                    <p class="text-sm text-[#00628E]">Performance-based bonuses see a significant dip, while base salaries remain flat or see modest growth.</p>
-                </div>
-            </div>
-        </section>
+        <main class="flex-1 p-4 sm:p-6 md:p-10">
+            
+            <section id="overview" class="mb-16">
+                <header class="mb-8">
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-[#003B55] mb-2">The New Playbook for Talent</h1>
+                    <p class="text-lg md:text-xl text-[#00628E]">An interactive briefing on the shifting MBA & Analyst hiring landscape from Sep 2024 to today.</p>
+                </header>
 
-        <section id="sector-deep-dive" class="mb-16 bg-white rounded-lg shadow-lg p-6 md:p-8">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-[#003B55]">Sector Deep Dive: A Tale of Three Markets</h2>
-                <p class="max-w-3xl mx-auto text-[#00628E] mt-2">The hiring climate varies dramatically across key sectors. While consulting faces significant headwinds due to economic uncertainty and project delays, corporate and banking roles show more resilience, driven by internal digital transformation and strategic growth initiatives.</p>
-            </div>
-            <div class="chart-container">
-                <canvas id="hiringSentimentChart"></canvas>
-            </div>
-        </section>
-
-        <section id="compensation" class="mb-16 bg-white rounded-lg shadow-lg p-6 md:p-8">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-[#003B55]">The Money Question: Compensation in Flux</h2>
-                <p class="max-w-3xl mx-auto text-[#00628E] mt-2">Total compensation is being reshaped. Firms are de-risking by holding base salaries steady while reducing variable pay like performance bonuses and signing bonuses, reflecting a more cautious market outlook.</p>
-            </div>
-             <div class="chart-container">
-                <canvas id="compensationChart"></canvas>
-            </div>
-        </section>
-
-        <section id="skills-shift" class="mb-16">
-            <div class="text-center mb-8">
-                 <h2 class="text-3xl font-bold text-[#003B55]">The Skills Shift: What's In, What's Out</h2>
-                <p class="max-w-3xl mx-auto text-[#00628E] mt-2">The demand for generalist strategists is waning, replaced by a surge in demand for specialists. Expertise in AI, data analytics, and sustainability are now table stakes for premium roles.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h3 class="text-2xl font-bold text-green-600 mb-4 flex items-center"><span class="text-3xl mr-3">📈</span>Trending Up</h3>
-                    <ul class="space-y-3 text-lg text-[#003B55]">
-                        <li class="flex items-start"><span class="mr-3 mt-1">🤖</span> <div><strong>AI & Machine Learning Strategy:</strong> Integrating AI into business operations.</div></li>
-                        <li class="flex items-start"><span class="mr-3 mt-1">📊</span> <div><strong>Data Analytics & Visualization:</strong> Translating complex data into actionable insights.</div></li>
-                        <li class="flex items-start"><span class="mr-3 mt-1">🌱</span> <div><strong>ESG & Sustainability Consulting:</strong> Focusing on environmental impact and governance.</div></li>
-                        <li class="flex items-start"><span class="mr-3 mt-1">💻</span> <div><strong>Tech Implementation & Cloud Services:</strong> Hands-on digital transformation roles.</div></li>
-                    </ul>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg p-6">
-                    <h3 class="text-2xl font-bold text-red-600 mb-4 flex items-center"><span class="text-3xl mr-3">📉</span>Trending Down</h3>
-                    <ul class="space-y-3 text-lg text-[#003B55]">
-                        <li class="flex items-start"><span class="mr-3 mt-1">🤔</span> <div><strong>Generalist Corporate Strategy:</strong> Broad-stroke strategic planning without a tech focus.</div></li>
-                        <li class="flex items-start"><span class="mr-3 mt-1">🏢</span> <div><strong>Due Diligence (Volume):</strong> M&A slowdown has reduced the volume of diligence projects.</div></li>
-                        <li class="flex items-start"><span class="mr-3 mt-1">📈</span> <div><strong>Traditional Market Research:</strong> Being replaced by data-driven analytics approaches.</div></li>
-                        <li class="flex items-start"><span class="mr-3 mt-1">👥</span> <div><strong>Human Capital Generalists:</strong> Shift towards specialized HR tech and analytics roles.</div></li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section id="global-view" class="mb-16">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-[#003B55]">Global Headwinds & Tailwinds</h2>
-                <p class="max-w-3xl mx-auto text-[#00628E] mt-2">Hiring is not monolithic across the globe. Mature markets like the US and Europe are experiencing a cooldown, while growth markets in APAC and India, though cautious, still present pockets of opportunity.</p>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-white rounded-lg shadow-lg p-6 border-l-8 border-red-500">
-                    <h3 class="text-xl font-bold mb-2 flex items-center"><span class="text-2xl mr-2">🇺🇸</span> US & Canada</h3>
-                    <p class="text-[#00628E]"><strong>Status: Cooling.</strong> Major consulting firms have delayed start dates and reduced campus hiring. Tech sector layoffs have increased the MBA talent supply, making competition fierce.</p>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg p-6 border-l-8 border-orange-500">
-                    <h3 class="text-xl font-bold mb-2 flex items-center"><span class="text-2xl mr-2">🇪🇺</span> Europe</h3>
-                    <p class="text-[#00628E]"><strong>Status: Cautious.</strong> Similar trends to the US, with boutique and specialized firms faring better than large generalist consultancies. Financial services hiring in London remains subdued.</p>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg p-6 border-l-8 border-yellow-500">
-                     <h3 class="text-xl font-bold mb-2 flex items-center"><span class="text-2xl mr-2">🇮🇳</span> India</h3>
-                    <p class="text-[#00628E]"><strong>Status: Mixed.</strong> Tech consulting and corporate strategy roles are still hiring, but with increased scrutiny on profitability. Start-up ecosystem slowdown has impacted analyst roles.</p>
-                </div>
-                <div class="bg-white rounded-lg shadow-lg p-6 border-l-8 border-green-500">
-                    <h3 class="text-xl font-bold mb-2 flex items-center"><span class="text-2xl mr-2">🌏</span> APAC</h3>
-                    <p class="text-[#00628E]"><strong>Status: Pockets of Growth.</strong> Singapore and other financial hubs show resilience. Wealth management is a key growth area, driven by increasing regional wealth.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="playbook" class="mb-16">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-[#003B55]">The Road Ahead: An Actionable Playbook</h2>
-                <p class="max-w-3xl mx-auto text-[#00628E] mt-2">Navigating this market requires a proactive and targeted approach for both candidates and hiring managers.</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                <div>
-                    <h3 class="text-2xl font-bold text-center text-[#00628E] mb-6">For Candidates</h3>
-                    <div class="space-y-4">
-                        <div class="flex">
-                            <div class="flex flex-col items-center mr-4">
-                                <div><div class="flex items-center justify-center w-10 h-10 bg-[#00A6ED] rounded-full text-white font-bold">1</div></div>
-                                <div class="w-px h-full bg-gray-300"></div>
-                            </div>
-                            <div class="bg-white rounded-lg shadow-md p-4 w-full"><strong>Specialize & Skill Up:</strong> Go deep on a high-demand skill like AI or ESG. Certifications in Python, Tableau, or cloud platforms are differentiators.</div>
-                        </div>
-                        <div class="flex">
-                             <div class="flex flex-col items-center mr-4">
-                                <div><div class="flex items-center justify-center w-10 h-10 bg-[#00A6ED] rounded-full text-white font-bold">2</div></div>
-                                <div class="w-px h-full bg-gray-300"></div>
-                            </div>
-                            <div class="bg-white rounded-lg shadow-md p-4 w-full"><strong>Network Beyond Tier 1:</strong> Explore boutique firms, corporate strategy roles, and private equity portfolio companies which have more immediate hiring needs.</div>
-                        </div>
-                        <div class="flex">
-                             <div class="flex flex-col items-center mr-4">
-                                <div><div class="flex items-center justify-center w-10 h-10 bg-[#00A6ED] rounded-full text-white font-bold">3</div></div>
-                            </div>
-                            <div class="bg-white rounded-lg shadow-md p-4 w-full"><strong>Show, Don't Tell:</strong> Build a portfolio of projects. Use case studies from coursework or internships to demonstrate tangible impact and analytical skills.</div>
-                        </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <p class="text-5xl font-extrabold text-[#00A6ED]">-35%</p>
+                        <h3 class="text-lg font-bold mt-2">Consulting Hiring</h3>
+                        <p class="text-sm text-[#00628E] mt-1">Estimated drop in new MBA/analyst roles at top-tier firms due to economic headwinds and delayed projects.</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <p class="text-5xl font-extrabold text-[#00A6ED]">+15%</p>
+                        <h3 class="text-lg font-bold mt-2">Demand for AI/ML Skills</h3>
+                        <p class="text-sm text-[#00628E] mt-1">Surge in job postings requiring data science and AI expertise across all sectors analyzed.</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <p class="text-5xl font-extrabold text-[#00A6ED]">-20%</p>
+                        <h3 class="text-lg font-bold mt-2">Average Bonus Payouts</h3>
+                        <p class="text-sm text-[#00628E] mt-1">Variable compensation sees a significant dip as firms de-risk in a cautious market.</p>
                     </div>
                 </div>
-                 <div>
-                    <h3 class="text-2xl font-bold text-center text-[#00628E] mb-6">For Hiring Managers</h3>
-                    <div class="space-y-4">
-                        <div class="flex">
-                            <div class="flex flex-col items-center mr-4">
-                                <div><div class="flex items-center justify-center w-10 h-10 bg-[#003B55] rounded-full text-white font-bold">1</div></div>
-                                <div class="w-px h-full bg-gray-300"></div>
-                            </div>
-                            <div class="bg-white rounded-lg shadow-md p-4 w-full"><strong>Rethink Role Profiles:</strong> Prioritize specific technical skills and adaptability over generalist prestige. Hire for demonstrable skills, not just school names.</div>
-                        </div>
-                         <div class="flex">
-                             <div class="flex flex-col items-center mr-4">
-                                <div><div class="flex items-center justify-center w-10 h-10 bg-[#003B55] rounded-full text-white font-bold">2</div></div>
-                                <div class="w-px h-full bg-gray-300"></div>
-                            </div>
-                            <div class="bg-white rounded-lg shadow-md p-4 w-full"><strong>Look for Talent in New Places:</strong> Expand recruiting beyond traditional target schools to find candidates with diverse backgrounds and specialized experience.</div>
-                        </div>
-                        <div class="flex">
-                             <div class="flex flex-col items-center mr-4">
-                                <div><div class="flex items-center justify-center w-10 h-10 bg-[#003B55] rounded-full text-white font-bold">3</div></div>
-                            </div>
-                            <div class="bg-white rounded-lg shadow-md p-4 w-full"><strong>Focus on Retention:</strong> In a tight market, investing in upskilling current employees can be more effective than competing for a limited pool of new, expensive talent.</div>
-                        </div>
+            </section>
+
+            <section id="sectors" class="mb-16 bg-white rounded-lg shadow-lg p-6 md:p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-[#003B55]">Sector Analysis: A Tale of Three Markets</h2>
+                    <p class="max-w-3xl mx-auto text-[#00628E] mt-2">The hiring climate varies dramatically across key sectors. While consulting faces a slowdown, corporate and banking roles show more resilience. Use the filter below to isolate each sector's performance.</p>
+                    <div class="mt-4">
+                        <select id="sectorFilter" class="p-2 border rounded-md bg-gray-50 focus:ring-2 focus:ring-[#00A6ED]">
+                            <option value="all">All Sectors</option>
+                            <option value="0">Management Consulting</option>
+                            <option value="1">Wealth Management</option>
+                            <option value="2">Corporate & Banking</option>
+                        </select>
                     </div>
                 </div>
-            </div>
-        </section>
+                <div class="chart-container">
+                    <canvas id="hiringSentimentChart"></canvas>
+                </div>
+            </section>
 
+            <section id="compensation" class="mb-16 bg-white rounded-lg shadow-lg p-6 md:p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-[#003B55]">Compensation in Flux</h2>
+                    <p class="max-w-3xl mx-auto text-[#00628E] mt-2">Firms are reshaping compensation by holding base salaries relatively steady while reducing variable pay like performance and signing bonuses. This chart shows the projected shift in the average MBA package at top firms.</p>
+                </div>
+                 <div class="chart-container">
+                    <canvas id="compensationChart"></canvas>
+                </div>
+            </section>
+
+            <section id="skills" class="mb-16">
+                <div class="text-center mb-8">
+                     <h2 class="text-3xl font-bold text-[#003B55]">The Great Skills Rotation</h2>
+                    <p class="max-w-3xl mx-auto text-[#00628E] mt-2">The market has pivoted from rewarding generalists to hunting for specialists. Expertise in AI, data analytics, and sustainability are now critical differentiators for premium roles.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-2xl font-bold text-green-600 mb-4 flex items-center"><span>📈</span><span class="ml-2">Trending Up: High-Demand Roles</span></h3>
+                        <ul class="space-y-3 text-lg">
+                            <li><strong>AI & ML Strategy:</strong> Integrating AI into business ops.</li>
+                            <li><strong>Data Analytics & Visualization:</strong> Turning data into actionable insights.</li>
+                            <li><strong>ESG & Sustainability Consulting:</strong> Focusing on environmental impact.</li>
+                            <li><strong>Tech Implementation & Cloud Services:</strong> Hands-on digital transformation.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-2xl font-bold text-red-600 mb-4 flex items-center"><span>📉</span><span class="ml-2">Trending Down: Decreasing Roles</span></h3>
+                        <ul class="space-y-3 text-lg">
+                            <li><strong>Generalist Corporate Strategy:</strong> Broad planning without a tech edge.</li>
+                            <li><strong>Due Diligence (Volume):</strong> Reduced M&A activity has lowered demand.</li>
+                            <li><strong>Traditional Market Research:</strong> Being replaced by data-driven analytics.</li>
+                            <li><strong>Human Capital Generalists:</strong> Shift towards specialized HR tech roles.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="geography" class="mb-16">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-[#003B55]">Global View: Headwinds & Tailwinds</h2>
+                    <p class="max-w-3xl mx-auto text-[#00628E] mt-2">Hiring is not monolithic. Mature markets are cooling while certain growth markets still present pockets of opportunity, particularly in specialized, high-growth areas.</p>
+                </div>
+                <div id="geo-cards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                </div>
+            </section>
+
+            <section id="playbook">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-[#003B55]">Actionable Playbook</h2>
+                    <p class="max-w-3xl mx-auto text-[#00628E] mt-2">Navigating this market requires a proactive, targeted approach for both job seekers and employers.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                    <div>
+                        <h3 class="text-2xl font-bold text-center text-[#00628E] mb-6">For Candidates</h3>
+                        <div id="candidate-playbook" class="space-y-4"></div>
+                    </div>
+                     <div>
+                        <h3 class="text-2xl font-bold text-center text-[#00628E] mb-6">For Hiring Managers</h3>
+                        <div id="manager-playbook" class="space-y-4"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-
-            function processLabels(labels) {
-                const maxLen = 16;
-                return labels.map(label => {
-                    if (label.length > maxLen) {
-                        const words = label.split(' ');
-                        let currentLine = '';
-                        const lines = [];
-                        words.forEach(word => {
-                            if ((currentLine + ' ' + word).trim().length > maxLen) {
-                                lines.push(currentLine.trim());
-                                currentLine = word;
-                            } else {
-                                currentLine = (currentLine + ' ' + word).trim();
-                            }
-                        });
-                        if(currentLine) lines.push(currentLine.trim());
-                        return lines;
-                    }
-                    return label;
-                });
-            }
-
-            const sharedTooltipOptions = {
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            title: function(tooltipItems) {
-                                const item = tooltipItems[0];
-                                let label = item.chart.data.labels[item.dataIndex];
-                                if (Array.isArray(label)) {
-                                  return label.join(' ');
-                                } else {
-                                  return label;
-                                }
-                            }
-                        }
-                    }
+            const data = {
+                sentiment: {
+                    labels: ['Management Consulting', 'Wealth Management', 'Corporate & Banking'],
+                    values: [-35, -10, 5]
+                },
+                compensation: {
+                    labels: ['2024 (Actual)', '2025 (Projected)'],
+                    datasets: [
+                        { label: 'Base Salary', data: [175, 180] },
+                        { label: 'Performance Bonus', data: [45, 30] },
+                        { label: 'Signing Bonus', data: [30, 15] }
+                    ]
+                },
+                geography: [
+                    { region: 'US & Canada', status: 'Cooling', color: 'red-500', icon: '🇺🇸', text: 'Major consulting firms have delayed start dates. Tech sector layoffs have increased the MBA talent supply, making competition fierce.' },
+                    { region: 'Europe', status: 'Cautious', color: 'orange-500', icon: '🇪🇺', text: 'Similar trends to the US, with boutique firms faring better. Financial services hiring in London remains subdued.' },
+                    { region: 'India', status: 'Mixed', color: 'yellow-500', icon: '🇮🇳', text: 'Tech consulting and corporate strategy roles still hiring, but with increased scrutiny. Start-up ecosystem slowdown has impacted analyst roles.' },
+                    { region: 'APAC', status: 'Growth Pockets', color: 'green-500', icon: '🌏', text: 'Singapore and other financial hubs show resilience. Wealth management is a key growth area, driven by increasing regional wealth.' }
+                ],
+                playbook: {
+                    candidates: [
+                        { title: 'Specialize & Skill Up', text: 'Go deep on a high-demand skill like AI or ESG. Certifications in Python, Tableau, or cloud platforms are differentiators.' },
+                        { title: 'Network Beyond Tier 1', text: 'Explore boutique firms, corporate strategy roles, and private equity portfolio companies which have more immediate hiring needs.' },
+                        { title: 'Show, Don\'t Tell', text: 'Build a portfolio of projects. Use case studies to demonstrate tangible impact and analytical skills.' }
+                    ],
+                    managers: [
+                        { title: 'Rethink Role Profiles', text: 'Prioritize specific technical skills and adaptability over generalist prestige. Hire for demonstrable skills, not just school names.' },
+                        { title: 'Look for Talent in New Places', text: 'Expand recruiting beyond traditional target schools to find candidates with diverse backgrounds and specialized experience.' },
+                        { title: 'Focus on Retention', text: 'In a tight market, investing in upskilling current employees can be more effective than competing for new, expensive talent.' }
+                    ]
                 }
             };
-            
+
             const brilliantBluesPalette = {
                 primary: '#00A6ED',
                 secondary: '#00628E',
                 tertiary: '#003B55',
-                accent: '#88CFF4'
+                accent: '#88CFF4',
+                transparentPrimary: 'rgba(0, 166, 237, 0.6)',
+                transparentSecondary: 'rgba(0, 98, 142, 0.6)',
+                transparentTertiary: 'rgba(0, 59, 85, 0.6)',
+            };
+            
+            const sharedTooltipOptions = {
+                callbacks: {
+                    title: (tooltipItems) => {
+                        const item = tooltipItems[0];
+                        let label = item.chart.data.labels[item.dataIndex];
+                        return Array.isArray(label) ? label.join(' ') : label;
+                    }
+                }
+            };
+            
+            const processLabels = (labels) => {
+                const maxLen = 16;
+                return labels.map(label => {
+                    if (label.length <= maxLen) return label;
+                    const words = label.split(' ');
+                    let currentLine = '';
+                    const lines = [];
+                    words.forEach(word => {
+                        if ((currentLine + ' ' + word).trim().length > maxLen) {
+                            lines.push(currentLine.trim());
+                            currentLine = word;
+                        } else {
+                            currentLine = (currentLine + ' ' + word).trim();
+                        }
+                    });
+                    if (currentLine) lines.push(currentLine.trim());
+                    return lines;
+                });
             };
 
             const hiringSentimentCtx = document.getElementById('hiringSentimentChart').getContext('2d');
-            new Chart(hiringSentimentCtx, {
+            const hiringSentimentChart = new Chart(hiringSentimentCtx, {
                 type: 'bar',
                 data: {
-                    labels: processLabels(['Management Consulting', 'Wealth Management', 'Corporate & Banking']),
+                    labels: processLabels(data.sentiment.labels),
                     datasets: [{
                         label: 'Hiring Change (YoY)',
-                        data: [-35, -10, 5],
+                        data: data.sentiment.values,
                         backgroundColor: [
-                            brilliantBluesPalette.primary,
-                            brilliantBluesPalette.secondary,
-                            brilliantBluesPalette.tertiary
+                            brilliantBluesPalette.transparentPrimary,
+                            brilliantBluesPalette.transparentSecondary,
+                            brilliantBluesPalette.transparentTertiary
                         ],
                         borderColor: [
                             brilliantBluesPalette.primary,
                             brilliantBluesPalette.secondary,
                             brilliantBluesPalette.tertiary
                         ],
-                        borderWidth: 1
+                        borderWidth: 2
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            }
-                        }
-                    },
-                    plugins: {
-                        ...sharedTooltipOptions.plugins,
-                        legend: {
-                            display: false
-                        }
-                    }
+                    scales: { y: { beginAtZero: false, ticks: { callback: value => value + '%' } } },
+                    plugins: { tooltip: sharedTooltipOptions, legend: { display: false } }
                 }
+            });
+
+            document.getElementById('sectorFilter').addEventListener('change', (e) => {
+                const value = e.target.value;
+                const fullData = data.sentiment.values;
+                const fullColors = [
+                    brilliantBluesPalette.transparentPrimary, 
+                    brilliantBluesPalette.transparentSecondary, 
+                    brilliantBluesPalette.transparentTertiary
+                ];
+                 const fullBorderColors = [
+                    brilliantBluesPalette.primary, 
+                    brilliantBluesPalette.secondary, 
+                    brilliantBluesPalette.tertiary
+                ];
+                
+                if (value === 'all') {
+                    hiringSentimentChart.data.datasets[0].data = fullData;
+                    hiringSentimentChart.data.datasets[0].backgroundColor = fullColors;
+                    hiringSentimentChart.data.datasets[0].borderColor = fullBorderColors;
+                } else {
+                    const index = parseInt(value);
+                    const filteredData = fullData.map((d, i) => i === index ? d : 0);
+                    const filteredColors = fullColors.map((c, i) => i === index ? c : 'rgba(200, 200, 200, 0.2)');
+                    const filteredBorders = fullBorderColors.map((c, i) => i === index ? c : 'rgba(200, 200, 200, 0.5)');
+                    hiringSentimentChart.data.datasets[0].data = filteredData;
+                    hiringSentimentChart.data.datasets[0].backgroundColor = filteredColors;
+                    hiringSentimentChart.data.datasets[0].borderColor = filteredBorders;
+                }
+                hiringSentimentChart.update();
             });
 
             const compensationCtx = document.getElementById('compensationChart').getContext('2d');
             new Chart(compensationCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['2024 (Actual)', '2025 (Projected)'],
+                    labels: data.compensation.labels,
                     datasets: [
-                        {
-                            label: 'Base Salary',
-                            data: [175, 180],
-                            backgroundColor: brilliantBluesPalette.secondary,
-                        },
-                        {
-                            label: 'Performance Bonus',
-                            data: [45, 30],
-                            backgroundColor: brilliantBluesPalette.primary,
-                        },
-                        {
-                            label: 'Signing Bonus',
-                            data: [30, 15],
-                            backgroundColor: brilliantBluesPalette.accent,
-                        }
+                        { ...data.compensation.datasets[0], backgroundColor: brilliantBluesPalette.tertiary },
+                        { ...data.compensation.datasets[1], backgroundColor: brilliantBluesPalette.secondary },
+                        { ...data.compensation.datasets[2], backgroundColor: brilliantBluesPalette.primary }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: {
-                            stacked: true,
-                        },
-                        y: {
-                            stacked: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return '$' + value + 'k';
-                                }
-                            }
-                        }
+                        x: { stacked: true },
+                        y: { stacked: true, ticks: { callback: value => '$' + value + 'k' } }
                     },
-                    plugins: {
-                       ...sharedTooltipOptions.plugins,
-                       legend: {
-                           position: 'bottom',
-                       }
-                    }
+                    plugins: { tooltip: { ...sharedTooltipOptions, mode: 'index' }, legend: { position: 'bottom' } }
                 }
             });
+
+            const geoContainer = document.getElementById('geo-cards');
+            data.geography.forEach(item => {
+                geoContainer.innerHTML += `
+                    <div class="bg-white rounded-lg shadow-lg p-6 border-l-8 border-${item.color}">
+                        <h3 class="text-xl font-bold mb-2 flex items-center"><span class="text-2xl mr-2">${item.icon}</span> ${item.region}</h3>
+                        <p class="text-[#00628E]"><strong class="text-[#003B55]">${item.status}:</strong> ${item.text}</p>
+                    </div>`;
+            });
+
+            const createPlaybookItem = (item, index, color, isLast) => `
+                <div class="flex">
+                    <div class="flex flex-col items-center mr-4">
+                        <div><div class="flex items-center justify-center w-10 h-10 bg-[${color}] rounded-full text-white font-bold">${index + 1}</div></div>
+                        ${!isLast ? '<div class="w-px h-full bg-gray-300"></div>' : ''}
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-4 w-full"><strong>${item.title}:</strong> ${item.text}</div>
+                </div>`;
+
+            const candidateContainer = document.getElementById('candidate-playbook');
+            data.playbook.candidates.forEach((item, i) => {
+                candidateContainer.innerHTML += createPlaybookItem(item, i, brilliantBluesPalette.primary, i === data.playbook.candidates.length - 1);
+            });
+
+            const managerContainer = document.getElementById('manager-playbook');
+            data.playbook.managers.forEach((item, i) => {
+                managerContainer.innerHTML += createPlaybookItem(item, i, brilliantBluesPalette.tertiary, i === data.playbook.managers.length - 1);
+            });
+
+            const sections = document.querySelectorAll('main section');
+            const navLinks = document.querySelectorAll('nav a');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                        });
+                    }
+                });
+            }, { rootMargin: '-30% 0px -70% 0px' });
+            sections.forEach(section => observer.observe(section));
         });
     </script>
 </body>
